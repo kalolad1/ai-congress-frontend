@@ -2,6 +2,9 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import ConvexClientProvider from "./ConvexClientProvider";
+import '@mantine/core/styles.css';
+import { createTheme, MantineProvider } from '@mantine/core';
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -10,7 +13,11 @@ export const metadata: Metadata = {
   description: "My app description",
 };
 
-export default function RootLayout({
+const theme = createTheme({
+  /** Put your mantine theme override here */
+});
+
+export default function RootLayout ({
   children,
 }: {
   children: React.ReactNode;
@@ -18,7 +25,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ConvexClientProvider>{children}</ConvexClientProvider>
+        <MantineProvider theme={theme}>
+          <ConvexClientProvider>{children}</ConvexClientProvider>
+        </MantineProvider>
       </body>
     </html>
   );
