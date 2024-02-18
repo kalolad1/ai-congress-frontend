@@ -1,20 +1,14 @@
 .chat {
-  overflow-y: auto;
-  height: 85vh;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   padding: 40px;
+  height: 100vh;
 }
 
-.message-container {}
-
-@keyframes ping {
-
-  75%,
-  100% {
-    transform: scale(2);
-    opacity: 0;
-  }
+.message-container {
+  overflow-y: scroll;
+  height: 70vh;
 }
 
 .chat article {
@@ -25,25 +19,6 @@
   margin-top: 12px;
   animation: 0.15s ease-in-out message;
   box-sizing: content-box;
-}
-
-@media (prefers-reduced-motion) {
-  .chat article {
-    animation-name: fade;
-  }
-}
-
-@keyframes message {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-}
-
-@keyframes fade {
-  from {
-    opacity: 0;
-  }
 }
 
 .chat article div {
@@ -87,58 +62,10 @@
   justify-self: end;
 }
 
-.input-container {
-  bottom: 0;
-  position: fixed;
-  width: 70%;
-}
-
-.chat form {
-  margin-top: 20px;
-  left: 8px;
-  height: 72px;
+.form-container {
   display: flex;
-  margin-bottom: 10px;
-}
-
-.chat input {
-  color: #111827;
-  width: 100%;
-  font-size: 18px;
-  padding-left: 20px;
-  padding-right: 72px;
-  font-family: inherit;
-  border: 2px solid gainsboro;
-  border-radius: 16px;
-}
-
-.chat input::placeholder {
-  color: #6b7280;
-}
-
-
-.chat button {
-  display: hidden;
-  appearance: none;
-  width: 48px;
-  height: 48px;
-  border: 0;
-  border-radius: 50%;
-  position: absolute;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: white;
-  font-size: 0;
-  transition: 0.15s ease-in-out opacity;
-
-  background-color: var(--primary);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='white' %3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5' /%3E%3C/svg%3E%0A");
-  background-size: 24px;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
-.chat button:disabled {
-  opacity: 0.7;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
 }

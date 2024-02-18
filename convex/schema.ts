@@ -6,4 +6,8 @@ export default defineSchema({
     author: v.string(),
     body: v.string(),
   }),
+  users: defineTable({
+    name: v.string(),
+    userId: v.string(),
+  }),
 });
