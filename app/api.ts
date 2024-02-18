@@ -7,8 +7,8 @@ const SAVE_CHAT = '/savechat'
 const SEND_FEEDBACK = '/sendfeedback'
 const OPTIMIZE = '/optimize'
 
-export const createUser = async (name: string) => {
-  return fetch(`${ENDPOINT}${CREATE_USER_URL}?name=${name}`, {
+export const createUser = async (name: string, userId: string) => {
+  return fetch(`${ENDPOINT}${CREATE_USER_URL}?name=${name}&user_id=${userId}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'

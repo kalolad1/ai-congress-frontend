@@ -18,20 +18,22 @@ export default function Home () {
   const router = useRouter()
 
   const handleButtonClick = async () => {
-    // Create user on backend
-    // Call the api createUser and read the response
-    createUser(name)
-      .then(response => response.json())
-      .then(data => {
-        // Store user id in local storage
-        localStorage.setItem('userId', data.user_id)
+    // Create a random user id
+    const userId = Math.floor(Math.random() * 5000).toString();
 
-        // Store user in convex database
-        createUserConvex({ name: name, userId: data.user_id.toString() })
-          .then(response => console.log(response))
-          .catch(error => console.log(error))
-      })
+    // Store user in convex database
+    createUserConvex({ name: name, userId: userId })
+      .then(response => console.log(response))
       .catch(error => console.log(error))
+
+    // Store user in backend database
+    createUser(name, userId)
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(error => console.log(error))
+    
+      // Store in local storage
+    localStorage.setItem('userId', userId)
 
     // Move to the next page
     router.push('/user_home')

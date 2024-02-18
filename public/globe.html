@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gov.ai</title>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400&display=swap" rel="stylesheet">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.9.4/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "IBM Plex Sans";
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .marker {
+            background-image: url('https://docs.mapbox.com/mapbox-gl-js/assets/pin.svg');
+            background-size: cover;
+            cursor: pointer;
+
+        }
+
+
+        .mapboxgl-ctrl {
+            display: none !important;
+        }
+
+        .layover>* {
+            position: absolute;
+            z-index: 2;
+            color: white
+        }
+
+        .mock {
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+
+        }
+
+        .form {
+            color: black;
+            top: 15px;
+            left: calc(100% - 15px);
+            transform: translateX(-100%);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layover">
+        <div class="form">
+            <div class="card bg-base-200 w-80">
+            </div>
+        </div>
+    </div>
+    <div id="map"></div>
+</body>
+
+
+<script>
+
+    // TO MAKE THE MAP APPEAR YOU MUST
+    // ADD YOUR ACCESS TOKEN FROM
+    // https://account.mapbox.com
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZXppcGVkIiwiYSI6ImNsc3FvMnF1azEzZmMya211ajVoY2R6MzkifQ.MouI5lEQo3YU7Zc0rk98PA';
+    const geojson = {
+        'type': 'FeatureCollection',
+        'features': [
+            {
+                'type': 'Feature',
+                'properties': {
+                    'name': 'Darshan Kalola',
+                    'altitude': 8849,
+                },
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [-108.5885, 32.4280]
+                }
+            },
+            {
+                'type': 'Feature',
+                'properties': {
+                    'name': 'Sarah Liaw',
+                    'altitude': 6194,
+                },
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [-102.5885, 34.4280]
+                }
+            },
+            {
+                'type': 'Feature',
+                'properties': {
+                    'name': 'Mendoza Smith',
+                    'altitude': 6961,
+                },
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [-110.5885, 39.4280]
+                }
+            },
+            {
+                'type': 'Feature',
+                'properties': {
+                    'name': 'Alan Turing',
+                    'altitude': 2000,
+                },
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [-100.5885, 29.4280]
+                }
+            },
+            {
+                'type': 'Feature',
+                'properties': {
+                    'name': 'Bob Metcaffe',
+                    'altitude': 4392,
+                },
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [-104.5885, 39.4280]
+                }
+            },
+            {
+                'type': 'Feature',
+                'properties': {
+                    'name': 'Eddie Zhang',
+                    'altitude': 2450,
+                },
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [-97.5885, 32.4280]
+                }
+            },
+            {
+                'type': 'Feature',
+                'properties': {
+                    'name': 'Harry Lewis',
+                    'altitude': 2025,
+                },
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [-91.5885, 37.4280]
+                }
+            },
+            {
+                'type': 'Feature',
+                'properties': {
+                    'name': 'Barbara Liskov',
+                    'altitude': -86,
+                },
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [-92.5885, 34.4280]
+                }
+            },
+            {
+                'type': 'Feature',
+                'properties': {
+                    'name': 'Sam Altman',
+                    'altitude': 2,
+                },
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [-95.5885, 40.4280]
+                }
+            },
+            {
+                'type': 'Feature',
+                'properties': {
+                    'name': 'Marc Andressen',
+                    'altitude': 5895,
+                },
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [-90.5885, 40.4280]
+                }
+            },
+            {
+                'type': 'Feature',
+                'properties': {
+                    'name': 'Gordon Moore',
+                    'altitude': 5642,
+                },
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [-100.5885, 30.4280]
+                }
+            },
+        ]
+    }
+
+
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/light-v11',
+        center: [130, 35],
+        zoom: 0.75
+    });
+
+    map.on('style.load', () => {
+        map.setFog({}); // Set the default atmosphere style
+    });
+
+    function addPopups () {
+        for (const marker of geojson.features) {
+            // Create a DOM element for each marker.
+            const el = document.createElement('div');
+            el.className = 'marker';
+            const size = marker.properties.altitude / 100;
+            el.style.width = `${size}px`;
+            el.style.height = `${size}px`;
+
+            // Add a popup displayed on click for each marker
+            const popup = new mapboxgl.Popup({ offset: 25, maxWidth: 250, closeButton: false });
+
+            popup.setHTML(
+                `
+                <span style="font-size: 24px; font-family: IBM Plex Sans">
+                <strong>${marker.properties.name}</strong>
+                 `
+            );
+
+            // Add markers to the map.
+            new mapboxgl.Marker({
+                element: el,
+                // Point markers toward the nearest horizon
+                rotationAlignment: 'horizon',
+                offset: [0, -size / 2]
+
+            })
+                .setLngLat(marker.geometry.coordinates)
+                .setPopup(popup)
+                .addTo(map);
+        }
+    }
+    addPopups();
+</script>
+
+</html>
