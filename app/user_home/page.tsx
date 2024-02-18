@@ -3,6 +3,7 @@
 
 import { Container, Flex, Button, Stack, Title, Grid } from "@mantine/core";
 import { IconUsers } from '@tabler/icons-react';
+import Chat from '@/app/chat/chat'
 
 import Link from "next/link";
 import "./page.css";
@@ -36,7 +37,7 @@ export default function UserHome () {
 function Chatbot () {
   return (
     <div>
-      <Title>Chatbot</Title>
+      <Chat />
     </div>
   );
 }
