@@ -1,11 +1,11 @@
 import { useEffect, useState, useRef } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
-import { sendAction } from "@/app/api";
+import { optimize, sendAction, sendFeedback, saveChat } from "@/app/api";
 
 import "./chat.css";
 import classes from "./segmented_control.module.css";
-import { TextInput, SegmentedControl, Progress, Tooltip } from "@mantine/core";
+import { TextInput, SegmentedControl, Progress, Tooltip, Button } from "@mantine/core";
 
 const THRESHOLD_TO_OPTIMIZE = 20
 
@@ -14,6 +14,7 @@ export default function Chat ({ name, userId }) {
   const sendMessage = useMutation(api.messages.send);
   const [newMessageText, setNewMessageText] = useState("");
   const [messageType, setMessageType] = useState("chat");
+  const [isFeedbackFinished, setIsFeedbackFinished] = useState(false);
 
   const messagesEndRef = useRef(null)
   const scrollToBottom = () => {
@@ -34,15 +35,61 @@ export default function Chat ({ name, userId }) {
       await sendAction(userId, newMessageText)
     }
 
+    if (isSimulationFinished) {
+      console.log("SENDING FEEDBACK!")
+      await sendFeedback(userId, newMessageText)
+      setIsFeedbackFinished(true)
+    }
+
     // Clear message console.
     setNewMessageText("");
   }
 
+  const handleOptimizeButtonClick = async () => {
+    console.log("OPTIMIZING!")
+    await saveChat(messages)
+    await optimize()
+  }
+
   const progressValue = messages?.length / THRESHOLD_TO_OPTIMIZE * 100
+  const isSimulationFinished = progressValue > 100;
+
+  let submitButton;
+  if (isFeedbackFinished) {
+    submitButton =
+      <Button onClick={handleOptimizeButtonClick} className="box-shadow" justify="center" radius="lg" size="lg" c="green" variant="default">Optimize!</Button>
+  } else if (isSimulationFinished) {
+    submitButton = <SegmentedControl
+      radius="xl"
+      size="lg"
+      value='feedback'
+      data={['feedback']}
+      classNames={classes}
+      w="20%"
+    />
+  }
+  else {
+    submitButton = <Tooltip label="'None', 'Switch 0', 'Switch 1', 'Switch 2', 'Work', 'Play', 'Invest'">
+      <SegmentedControl
+        radius="xl"
+        size="lg"
+        value={messageType}
+        onChange={setMessageType}
+        data={['chat', 'action']}
+        classNames={classes}
+        w="40%"
+      />
+    </Tooltip>
+  }
+
 
   return (
     <div className="chat">
-      <Progress color="orange" radius="xl" size="md" value={progressValue} animated w="100%" mb="lg" />
+      {isSimulationFinished ?
+        <Button className="box-shadow" justify="center" radius="lg" size="lg" variant="default">
+          Simulation finished! Please provide your feedback related to your values, preferences, and objectives.
+        </Button> :
+        <Progress color="orange" radius="xl" size="md" value={progressValue} animated w="100%" mb="lg" />}
 
       <div className="message-container">
         {messages?.map((message) => (
@@ -68,17 +115,8 @@ export default function Chat ({ name, userId }) {
           radius="xl"
           w="95%"
         />
-        <Tooltip label="'None', 'Switch 0', 'Switch 1', 'Switch 2', 'Work', 'Play', 'Invest'">
-          <SegmentedControl
-            radius="xl"
-            size="lg"
-            value={messageType}
-            onChange={setMessageType}
-            data={['chat', 'action']}
-            classNames={classes}
-            w="40%"
-          />
-        </Tooltip>
+
+        {submitButton}
         <button type="submit" hidden />
       </form>
     </div>

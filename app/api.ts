@@ -34,9 +34,14 @@ export const getStateDetail = async (userId: string) => {
   })
 }
 
-export const sendMessages = async (messages: string[]) => {
-  const messagesAsParams = messages.map(encodeURIComponent).join('&');
-  return fetch(`${ENDPOINT}${SAVE_CHAT}${messagesAsParams}`, {
+export const saveChat = async (messages) => {
+  // Retrieve the body and author from the messages
+  const cleanedMessages = messages.map((message) => {
+    return `${message.author}: ${message.body}`
+  });
+
+  const messagesAsParams = cleanedMessages.map(encodeURIComponent).join('&');
+  return fetch(`${ENDPOINT}${SAVE_CHAT}?chat=${messagesAsParams}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'

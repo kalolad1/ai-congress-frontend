@@ -31,7 +31,7 @@ export default function UserHome () {
 
   useEffect(() => {
     getStateDetailLocal()
-    const interval = setInterval(() => getStateDetailLocal(), 5000)
+    const interval = setInterval(() => getStateDetailLocal(), 50000000)
     return () => {
       clearInterval(interval);
     }
@@ -56,7 +56,7 @@ function Sidebar ({ name, stateDetail }: { name: string, stateDetail: any }) {
     <Stack gap={70} justify="space-between" align="center">
       <Title mt="md" order={1}>{name}</Title>
       <StateDetail stateDetail={stateDetail} />
-      <Button mt={95} className="box-shadow" justify="center" radius="lg" size="lg" leftSection={<IconUsers size={14} />} variant="default" component={Link} href="/globe.html">
+      <Button mt={85} className="box-shadow" justify="center" radius="lg" size="lg" leftSection={<IconUsers size={14} />} variant="default" component={Link} href="/globe.html">
         Find more people
       </Button>
     </Stack>
@@ -77,7 +77,7 @@ function StateDetail ({ stateDetail }: { stateDetail: any }) {
   return (
     <Stack>
       {stateDetails}
-      <SegmentedControl
+      {/* <SegmentedControl
         radius="xl"
         size="sm"
         value={demoType}
@@ -85,7 +85,7 @@ function StateDetail ({ stateDetail }: { stateDetail: any }) {
         data={['insurance', 'general']}
         classNames={classes}
         w="100%"
-      />
+      /> */}
     </Stack>
   )
 }

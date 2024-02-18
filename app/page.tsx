@@ -61,7 +61,7 @@ export default function Home () {
             />
           </Stack>
           <Stack align="center">
-            <Button onClick={handleButtonClick} className="box-shadow" w="50%" justify="center" radius="lg" size="lg" variant="default">
+            <Button onClick={handleButtonClick} className="button box-shadow" w="50%" justify="center" radius="lg" size="lg" variant="default">
               Begin
             </Button>
           </Stack>
