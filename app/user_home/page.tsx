@@ -31,7 +31,7 @@ export default function UserHome () {
 
   useEffect(() => {
     getStateDetailLocal()
-    const interval = setInterval(() => getStateDetailLocal(), 50000000)
+    const interval = setInterval(() => getStateDetailLocal(), 5000)
     return () => {
       clearInterval(interval);
     }

@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { optimize, sendAction, sendFeedback, saveChat } from "@/app/api";
@@ -15,6 +16,7 @@ export default function Chat ({ name, userId }) {
   const [newMessageText, setNewMessageText] = useState("");
   const [messageType, setMessageType] = useState("chat");
   const [isFeedbackFinished, setIsFeedbackFinished] = useState(false);
+  const router = useRouter();
 
   const messagesEndRef = useRef(null)
   const scrollToBottom = () => {
@@ -49,6 +51,7 @@ export default function Chat ({ name, userId }) {
     console.log("OPTIMIZING!")
     await saveChat(messages)
     await optimize()
+    router.push("/visualization.html")
   }
 
   const progressValue = messages?.length / THRESHOLD_TO_OPTIMIZE * 100
