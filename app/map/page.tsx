@@ -10,16 +10,19 @@ import {
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
-const markers = [
+const people = [
   {
-    markerOffset: -15, name: "Eddie Zhang", coordinates: [-90.1193, 40.4897]
+    name: "Eddie Zhang", coordinates: [-90.1193, 40.4897]
   },
-];
+]
 
-const MapChart = () => {
+function MapChart () {
   return (
     <ComposableMap
       projection="geoAlbersUsa"
+      projectionConfig={{
+        scale: 800,
+      }}
     >
       <Geographies geography={geoUrl}>
         {({ geographies }) =>
@@ -33,13 +36,13 @@ const MapChart = () => {
           ))
         }
       </Geographies>
-      {markers.map(({ name, coordinates, markerOffset }) => (
+      {people.map(({ name, coordinates }) => (
         <Marker key={name} coordinates={coordinates}>
-          <circle r={10} fill="#F00" stroke="#fff" strokeWidth={2} />
+          <circle r={8} fill="#3498db" stroke="#fff" strokeWidth={2} />
           <text
             textAnchor="middle"
-            y={markerOffset}
-            style={{ fontFamily: "system-ui", fill: "#5D5A6D" }}
+            y={-15}
+            style={{ fill: "#5D5A6D", fontSize: "12px" }}
           >
             {name}
           </text>

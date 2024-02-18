@@ -3,32 +3,36 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
+import Link from "next/link";
+import { getStateDetail } from "@/app/api";
 
 import { Button, Stack, Title, Grid, Tooltip, SegmentedControl } from "@mantine/core";
 import { IconBrain, IconCoin, IconHeart, IconMoneybag, IconSocial, IconUmbrella, IconUsers, IconWallet } from '@tabler/icons-react';
 import Chat from '@/app/chat/chat'
-import Link from "next/link";
 
 import classes from "@/app/chat/segmented_control.module.css";
 import "./page.css";
+
 
 
 export default function UserHome () {
   const user = useQuery(api.users.get, { userId: localStorage.getItem("userId")! });
   const [stateDetail, setStateDetail] = useState(null);
 
-  useEffect(() => {
-    function getStateDetail () {
-      getStateDetail(user?.userId)
-        .then(result => result.json())
-        .then(data => setStateDetail(data))
-    }
-    getStateDetail()
-    const interval = setInterval(() => getStateDetail(), 1000)
-    return () => {
-      clearInterval(interval);
-    }
-  }, [])
+  const getStateDetailLocal = () => {
+    getStateDetail(user?.userId)
+      .then(result => result.json())
+      .then(data => setStateDetail(data))
+      .catch(err => console.log(err))
+  }
+
+  // useEffect(() => {
+  //   getStateDetailLocal()
+  //   const interval = setInterval(() => getStateDetailLocal(), 10000)
+  //   return () => {
+  //     clearInterval(interval);
+  //   }
+  // }, [])
 
   return (
     <Grid gutter={0}>
@@ -83,7 +87,7 @@ function StateDetail (props) {
   )
 }
 
-function GeneralStateDetails ({ netWorth, healthScore, wellnessScore, socialScore }) {
+function GeneralStateDetails ({ netWorth = 100, healthScore = 51, wellnessScore = 42, socialScore = 31 }) {
   return (
     <Stack gap="xs" mt={60}>
       <Tooltip label="Net worth">
