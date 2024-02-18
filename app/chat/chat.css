@@ -1,7 +1,12 @@
 .chat {
   overflow-y: auto;
-  height: 100vh;
+  height: 85vh;
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
 }
+
+.message-container {}
 
 @keyframes ping {
 
@@ -80,6 +85,12 @@
   background: var(--bubbles-mine-background);
   color: black;
   justify-self: end;
+}
+
+.input-container {
+  bottom: 0;
+  position: fixed;
+  width: 70%;
 }
 
 .chat form {

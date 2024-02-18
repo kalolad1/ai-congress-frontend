@@ -19,9 +19,7 @@ export default function UserHome () {
         </Stack>
       </Grid.Col>
       <Grid.Col span={9}>
-        <Stack p="xl" className="column">
           <Chat />
-        </Stack>
       </Grid.Col>
     </Grid>
   );
