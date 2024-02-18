@@ -20,7 +20,7 @@ export default function UserHome () {
       </Grid.Col>
       <Grid.Col span={8}>
         <Stack p="xl" className="column">
-          <Chatbot />
+          <Chat />
         </Stack>
       </Grid.Col>
       <Grid.Col span={2}>
@@ -31,14 +31,6 @@ export default function UserHome () {
         </Stack>
       </Grid.Col>
     </Grid>
-  );
-}
-
-function Chatbot () {
-  return (
-    <div>
-      <Chat />
-    </div>
   );
 }
 
