@@ -9,8 +9,8 @@ import { createTheme, MantineProvider } from '@mantine/core';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "My App Title",
-  description: "My app description",
+  title: "gov.ai",
+  description: "An AI governance platform.",
 };
 
 const theme = createTheme({
