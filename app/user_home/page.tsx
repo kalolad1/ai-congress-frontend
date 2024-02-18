@@ -15,12 +15,26 @@ import "./page.css";
 
 export default function UserHome () {
   const user = useQuery(api.users.get, { userId: localStorage.getItem("userId")! });
+  const [stateDetail, setStateDetail] = useState(null);
+
+  useEffect(() => {
+    function getStateDetail () {
+      getStateDetail(user?.userId)
+        .then(result => result.json())
+        .then(data => setStateDetail(data))
+    }
+    getStateDetail()
+    const interval = setInterval(() => getStateDetail(), 1000)
+    return () => {
+      clearInterval(interval);
+    }
+  }, [])
 
   return (
     <Grid gutter={0}>
       <Grid.Col span={3}>
         <Stack p="xl" className="column state-column">
-          <Sidebar name={user?.name} />
+          <Sidebar name={user?.name} stateDetail={stateDetail} />
         </Stack>
       </Grid.Col>
       <Grid.Col span={9}>
@@ -30,11 +44,11 @@ export default function UserHome () {
   );
 }
 
-function Sidebar ({ name }: { name: string }) {
+function Sidebar ({ name, stateDetail }: { name: string, stateDetail: any }) {
   return (
     <Stack gap={70} justify="space-between" align="center">
       <Title mt="md" order={1}>{name}</Title>
-      <StateDetail />
+      <StateDetail stateDetail={stateDetail} />
       <Button mt={140} className="box-shadow" justify="center" radius="lg" size="lg" leftSection={<IconUsers size={14} />} variant="default" component={Link} href="/map">
         Find more people
       </Button>
@@ -42,15 +56,15 @@ function Sidebar ({ name }: { name: string }) {
   );
 }
 
-function StateDetail () {
+function StateDetail (props) {
   const [demoType, setDemoType] = useState("general");
 
   let stateDetails;
 
   if (demoType === "general") {
-    stateDetails = <GeneralStateDetails />;
+    stateDetails = <GeneralStateDetails {...props} />;
   } else {
-    stateDetails = <InsuranceStateDetails />;
+    stateDetails = <InsuranceStateDetails {...props} />;
   }
 
   return (
@@ -69,61 +83,81 @@ function StateDetail () {
   )
 }
 
-function GeneralStateDetails () {
+function GeneralStateDetails ({ netWorth, healthScore, wellnessScore, socialScore }) {
   return (
     <Stack gap="xs" mt={60}>
       <Tooltip label="Net worth">
         <Button className="box-shadow" justify="center" radius="lg" size="lg" leftSection={<IconMoneybag />} variant="default">
-          $1,200,300
+          ${netWorth.toLocaleString("en-US")}
         </Button>
       </Tooltip>
       <Tooltip label="Health score">
         <Button className="box-shadow" justify="center" radius="lg" size="lg" leftSection={<IconHeart />} variant="default">
-          44 / 100
+          {healthScore} / 100
         </Button>
       </Tooltip>
       <Tooltip label="Wellness score">
         <Button className="box-shadow" justify="center" radius="lg" size="lg" leftSection={<IconBrain />} variant="default">
-          79 / 100
+          {wellnessScore} / 100
         </Button>
       </Tooltip>
       <Tooltip label="Social score">
         <Button className="box-shadow" justify="center" radius="lg" size="lg" leftSection={<IconSocial />} variant="default">
-          81 / 100
+          {socialScore} / 100
         </Button>
       </Tooltip>
     </Stack>
   )
 }
 
-function InsuranceStateDetails () {
+function InsuranceStateDetails ({ netWorth, healthScore, insurancePremium, insuranceCoverage, insuranceDeductible }) {
   return (
     <Stack gap="xs" mt={60}>
       <Tooltip label="Net worth">
         <Button className="box-shadow" justify="center" radius="lg" size="lg" leftSection={<IconMoneybag />} variant="default">
-          $1,200,300
+          ${netWorth.toLocaleString("en-US")}
         </Button>
       </Tooltip>
       <Tooltip label="Health score">
         <Button className="box-shadow" justify="center" radius="lg" size="lg" leftSection={<IconHeart />} variant="default">
-          44 / 100
+          {healthScore} / 100
         </Button>
       </Tooltip>
       <Tooltip label="Insurance premium">
         <Button className="box-shadow" justify="center" radius="lg" size="lg" leftSection={<IconCoin />} variant="default">
-          $2,000
+          ${insurancePremium.toLocaleString("en-US")}
         </Button>
       </Tooltip>
       <Tooltip label="Insurance coverage">
         <Button className="box-shadow" justify="center" radius="lg" size="lg" leftSection={<IconUmbrella />} variant="default">
-          $100,000
+          ${insuranceCoverage.toLocaleString("en-US")}
         </Button>
       </Tooltip>
       <Tooltip label="Insurance deductible">
         <Button className="box-shadow" justify="center" radius="lg" size="lg" leftSection={<IconWallet />} variant="default">
-          $500
+          ${insuranceDeductible.toLocaleString("en-US")}
         </Button>
       </Tooltip>
     </Stack>
   )
 }
+
+
+/*
+// General Case
+{
+  netWorth: number, // $
+  healthScore: number, // 0-100
+  wellnessScore: number, // 0-100
+  socialScore: number, // 0-100
+}
+
+// Insurance Case
+{
+  netWorth: number, // $
+  healthScore: number, // 0-100
+  insurancePremium: number, // $
+  insuranceCoverage: number, // $
+  insuranceDeductible: number, // $
+}
+*/

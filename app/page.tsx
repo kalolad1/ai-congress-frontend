@@ -6,8 +6,11 @@ import { useState } from "react";
 import { useRouter } from 'next/navigation'
 import { createUser } from "./api";
 
-import "./page.css";
 import { Stack, TextInput, Text, Button, Group, Title } from "@mantine/core";
+
+import "./page.css";
+import "./orbparticles.css";
+
 
 export default function Home () {
   const [name, setName] = useState("");
@@ -28,17 +31,23 @@ export default function Home () {
           .then(response => console.log(response))
           .catch(error => console.log(error))
       })
-      .catch(error => console.log(error))    
-    
+      .catch(error => console.log(error))
+
     // Move to the next page
     router.push('/user_home')
   }
 
+  const numParticles = Array.from(Array(100).keys());
+
+  const crazyOrbParticles = numParticles.map((number) => {
+    return <div className='c' key={number}></div>;
+  });
+
   return (
     <main>
-      <div className="screen">
+      <div className="dialogue-container">
         <Stack gap={75}>
-          <Stack align="center">
+          <Stack mt={175} align="center">
             <Title>What is your name?</Title>
             <TextInput
               value={name}
@@ -55,6 +64,10 @@ export default function Home () {
             </Button>
           </Stack>
         </Stack>
+      </div>
+      {/* Crazy orb in background */}
+      <div className='wrap'>
+        {crazyOrbParticles}
       </div>
     </main >
   );

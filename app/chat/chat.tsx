@@ -77,13 +77,3 @@ export default function Chat ({ name, userId }) {
     </div>
   );
 }
-/*
-{
-  netWorth: number, // $
-  physicalHealthScore: number, // 0-100
-  wellnessScore: number, // 0-100
-  socialScore: number, // 0-100
-}
-
-
-*/
